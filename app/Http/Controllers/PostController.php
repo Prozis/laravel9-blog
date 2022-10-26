@@ -53,7 +53,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -64,7 +64,7 @@ class PostController extends Controller
             'descr' => 'required|min:10',
         ]);
         $data['author_id'] = Auth::id();
-        $data['short_title'] =  $this->getShortTitle($data['title']);
+        $data['short_title'] = $this->getShortTitle($data['title']);
 
         $post = new Post();
 
@@ -79,12 +79,14 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::join('users', 'posts.author_id', '=', 'users.id')
+            ->select('posts.*', 'users.name')
+            ->findOrFail($id);
         $comments = Comment::where('post_id', '=', $id)->get();
 
         return view('posts.show', compact('post', 'comments'));
@@ -93,7 +95,7 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -105,8 +107,8 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -116,7 +118,7 @@ class PostController extends Controller
             'title' => 'required|unique:posts,title,' . $id,
             'descr' => 'required|min:10'
         ]);
-        $data['short_title'] =  $this->getShortTitle($data['title']);
+        $data['short_title'] = $this->getShortTitle($data['title']);
 
         $post->fill($data);
         $post->save();
@@ -127,7 +129,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -142,7 +144,8 @@ class PostController extends Controller
         return view('about');
     }
 
-    protected function getShortTitle($title) {
+    protected function getShortTitle($title)
+    {
         return (mb_strlen($title > 30)) ? mb_substr($title, 0, 30) . ' ...' : $title;
     }
 }

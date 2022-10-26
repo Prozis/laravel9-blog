@@ -35,7 +35,7 @@
                                 {{ $post->name }}
                             </div>
                             <div class="created-at">
-                                {{ $post->created_at }}
+                                {{ $post->created_at->format('d-m-Y H:i') }}
                             </div>
                         </div>
                     </div>

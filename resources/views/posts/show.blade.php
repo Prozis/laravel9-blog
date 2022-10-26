@@ -9,12 +9,12 @@
             <div class="card-descr">{{ $post->descr }}</div>
 
         </div>
-        <div class="card-footer">
+        <div class="card-footer mt-3 mb-3">
             <div class="author-name">
                 {{ $post->name }}
             </div>
             <div class="created-at">
-                {{ $post->created_at }}
+                {{ $post->created_at->format('d-m-Y H:i') }}
             </div>
         </div>
 
@@ -28,7 +28,7 @@
                         <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
                             <div class="g-mb-15">
                                 <h5 class="h5 g-color-gray-dark-v1 mb-0">{{ $comment->name }}</h5>
-                                <span class="g-color-gray-dark-v4 g-font-size-12">{{ $comment->created_at }}</span>
+                                <span class="g-color-gray-dark-v4 g-font-size-12">{{ $comment->created_at->format('d-m-Y H:i') }}</span>
                             </div>
 
                             <p>{{ $comment->text }}</p>
