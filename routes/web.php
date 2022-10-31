@@ -26,6 +26,7 @@ Route::get('/post/{id}/edit', [PostController::class, 'edit'])->name('post.edit'
 Route::patch('/post/{id}', [PostController::class, 'update'])->name('post.update');
 Route::delete('/post/{id}', [PostController::class, 'destroy'])->name('post.destroy');
 
+Route::post('/comment', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store');
 
 //Route::get('user/{id}', function ($id) {
 //    return view('test', compact('id'));

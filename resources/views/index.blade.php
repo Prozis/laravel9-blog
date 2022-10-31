@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Main')
+
 @section('content')
     <div class="container">
         @if(isset($_GET['search']))

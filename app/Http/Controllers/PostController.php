@@ -2,13 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Comment;
+use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+    protected $commentController;
+
+    public function __construct(CommentController $commentController)
+    {
+        $this->commentController = $commentController;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -87,9 +95,10 @@ class PostController extends Controller
         $post = Post::join('users', 'posts.author_id', '=', 'users.id')
             ->select('posts.*', 'users.name')
             ->findOrFail($id);
-        $comments = Comment::where('post_id', '=', $id)->get();
+        $comments = $this->commentController->index($id);
+        $newComment = new Comment();
 
-        return view('posts.show', compact('post', 'comments'));
+        return view('posts.show', compact('post', 'comments', 'newComment'));
     }
 
     /**
